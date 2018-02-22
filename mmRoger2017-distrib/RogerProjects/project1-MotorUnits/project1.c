@@ -21,23 +21,23 @@ void update_setpoints();
 /*************************************************************************/
 /* PROJECT #1 - COMPLETE THE FOLLOWING CONTROL PROCEDURES                */
 // gains for the PD controllers EYES
-double Kp_eye = 100.0;
-double Kd_eye = 0.045;
+double Kp_eye = 1.0;
+double Kd_eye = 0.029;
 double passive_Kd_eye = 0.001;
 
 // ARMS 
-double Kp_arm =  100.0;
-double Kd_arm =  1.115;
+double Kp_arm =  20.0;
+double Kd_arm =  3.27;
 double passive_Kd_arm = 1.0;
 
 // BASE TRANSLATION
-double Kp_base_trans = 25.0;
-double Kd_base_trans = 5; 
+double Kp_base_trans = 10.0;
+double Kd_base_trans = 7; 
 double passive_Kd_base_trans = 2.0;
 
 // BASE ROTATION
-double Kp_base_rot =  1.0;
-double Kd_base_rot =  0.08;
+double Kp_base_rot =  1;
+double Kd_base_rot =  0.9;
 double passive_Kd_base_rot = 1.0;
 /*************************************************************************/
 
@@ -60,6 +60,9 @@ double time;
     } 
     else roger->eye_torque[i] = passive_Kd_eye*theta_dot_error;
   }
+  //For plotting
+  char comma = ',';
+  printf("%lf %c", theta_error, comma);
 }
 
 /* PROJECT #1.2 - PD CONTROLLER FOR THE ARMS                             */
@@ -92,6 +95,9 @@ double time;
       }
     }
   }
+  //For plotting
+  char comma = ',';
+  printf("%lf %c", theta_error, comma);
 }
 
 /* Base PD controller, Cartesian reference */
@@ -118,6 +124,9 @@ double time;
   else {
     Fx = - passive_Kd_base_trans * trans_vel;
   }
+  //For plotting
+  char comma = ',';
+  printf("%lf %c", trans_error, comma);
   return(Fx);
 }
 
@@ -136,12 +145,14 @@ double time;
   if (ACTUATE_BASE) {
     // REPLACE THE FOLLOWING LINE WITH THE PD CONTROLLER FOR THE BASE
     // USING YOUR GAINS
-    Mz = Kp_base_rot*theta_error-Kd_base_rot*theta_dot_error;
+    Mz = Kp_base_rot*theta_error+Kd_base_rot*theta_dot_error;
   }
   else {
     Mz = passive_Kd_base_rot * theta_dot_error;
   }
-  
+  //For plotting
+  char comma = ',';
+  printf("%lf %c", theta_error, comma);
   return(Mz);
 }
 
